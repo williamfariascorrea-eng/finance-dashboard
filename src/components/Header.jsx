@@ -17,7 +17,7 @@ function BellIcon() {
 }
 
 function SunMoonIcon({ theme }) {
-  return theme === 'dark' ? (
+  return theme === 'paper' ? (
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M20 13.5A7.5 7.5 0 1110.5 4 6 6 0 0020 13.5z" />
     </svg>
@@ -32,16 +32,29 @@ function SunMoonIcon({ theme }) {
 export default function Header({ theme, onToggleTheme }) {
   return (
     <header className="header">
-      <div>
-        <span className="eyebrow">Visao geral</span>
-        <h1>Controle seu dinheiro com contexto visual</h1>
-        <p>Acompanhe saldo, entradas e saidas em um painel claro e objetivo.</p>
+      <div className="header__intro">
+        <span className="eyebrow">Executive finance</span>
+        <h1>Painel financeiro com leitura corporativa e sinal claro de desempenho.</h1>
+        <p>
+          Estrutura desenhada para operacao, previsibilidade e tomada de decisao, com visual mais
+          solido e menos cara de template.
+        </p>
+        <div className="header__meta">
+          <div className="header__meta-card">
+            <span>Janela ativa</span>
+            <strong>Abril 2026</strong>
+          </div>
+          <div className="header__meta-card">
+            <span>Responsavel</span>
+            <strong>Controladoria</strong>
+          </div>
+        </div>
       </div>
 
       <div className="header__actions">
         <label className="search surface">
           <SearchIcon />
-          <input type="text" placeholder="Buscar transacao" />
+          <input type="text" placeholder="Buscar movimento ou categoria" />
         </label>
 
         <button type="button" className="icon-button surface" aria-label="Notificacoes">
@@ -55,7 +68,7 @@ export default function Header({ theme, onToggleTheme }) {
           aria-label="Alternar tema"
         >
           <SunMoonIcon theme={theme} />
-          <span>{theme === 'dark' ? 'Dark' : 'Light'}</span>
+          <span>{theme === 'paper' ? 'Modo escuro' : 'Modo claro'}</span>
         </button>
       </div>
     </header>

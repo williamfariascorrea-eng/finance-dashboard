@@ -1,9 +1,9 @@
 const menuItems = [
   { label: 'Dashboard', active: true },
-  { label: 'Carteiras' },
-  { label: 'Metas' },
-  { label: 'Relatorios' },
-  { label: 'Configuracoes' },
+  { label: 'Fluxo' },
+  { label: 'Planejamento' },
+  { label: 'Narrativas' },
+  { label: 'Ajustes' },
 ];
 
 function LogoIcon() {
@@ -18,13 +18,20 @@ function LogoIcon() {
 export default function Sidebar() {
   return (
     <aside className="sidebar surface">
-      <div className="brand">
-        <div className="brand__icon">
-          <LogoIcon />
+      <div className="sidebar__top">
+        <div className="brand">
+          <div className="brand__icon">
+            <LogoIcon />
+          </div>
+          <div>
+            <strong>Atlas Capital</strong>
+            <p>Control tower</p>
+          </div>
         </div>
-        <div>
-          <strong>Finance Flow</strong>
-          <p>Painel financeiro</p>
+
+        <div className="sidebar__stamp">
+          <span>Modo curadoria</span>
+          <strong>Q2</strong>
         </div>
       </div>
 
@@ -42,9 +49,16 @@ export default function Sidebar() {
       </nav>
 
       <div className="sidebar__promo">
-        <span>Performance</span>
-        <strong>83%</strong>
-        <p>Seu fluxo esta mais saudavel que no ultimo mes.</p>
+        <span>Resumo do conselho</span>
+        <strong>Liquidez controlada</strong>
+        <p>Receita recorrente sustenta o caixa e reduz exposicao de curto prazo.</p>
+      </div>
+
+      <div className="sidebar__footer">
+        <p>Atualizado ha 4 minutos</p>
+        <button type="button" className="sidebar__ghost">
+          Exportar snapshot
+        </button>
       </div>
     </aside>
   );

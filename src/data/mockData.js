@@ -1,20 +1,20 @@
 export const summaryCards = [
   {
-    title: 'Saldo total',
+    title: 'Reserva liquida',
     value: 'R$ 24.860',
-    change: '+12.4% no mes',
+    change: '+12.4% frente ao fechamento anterior',
     tone: 'positive',
   },
   {
-    title: 'Receita',
+    title: 'Receita recorrente',
     value: 'R$ 12.430',
-    change: '+8.1% no mes',
+    change: '+8.1% puxado por contratos recorrentes',
     tone: 'positive',
   },
   {
-    title: 'Despesas',
+    title: 'Pressao de custos',
     value: 'R$ 4.180',
-    change: '-3.2% no mes',
+    change: '-3.2% com corte em despesas acessorias',
     tone: 'negative',
   },
 ];

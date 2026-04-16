@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Dashboard from './pages/Dashboard';
 
 export default function App() {
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('paper');
 
   useEffect(() => {
     const root = document?.documentElement;
@@ -13,14 +13,14 @@ export default function App() {
     }
 
     if (body) {
-      body.classList.toggle('light', theme === 'light');
+      body.classList.toggle('night', theme === 'night');
     }
   }, [theme]);
 
   return (
     <Dashboard
       theme={theme}
-      onToggleTheme={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
+      onToggleTheme={() => setTheme((current) => (current === 'paper' ? 'night' : 'paper'))}
     />
   );
 }

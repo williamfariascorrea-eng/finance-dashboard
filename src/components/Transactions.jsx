@@ -9,8 +9,8 @@ export default function Transactions({ items, filter, onFilterChange }) {
     <section className="transactions surface">
       <div className="section-heading">
         <div>
-          <span className="eyebrow">Movimentacoes</span>
-          <h2>Transacoes recentes</h2>
+          <span className="eyebrow">Ledger vivo</span>
+          <h2>Movimentos recentes</h2>
         </div>
 
         <div className="filter-group">
