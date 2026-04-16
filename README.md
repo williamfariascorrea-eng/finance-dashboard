@@ -21,11 +21,7 @@ Dashboard moderno de controle financeiro com foco em UI/UX, responsividade e exp
 
 ## 🔗 Acesse o projeto
 
-👉 (COLOQUE SEU LINK DO VERCEL AQUI)
-
-## 📸 Preview
-
-![preview](./preview.png)
+👉 https://finance-dashboard-jqhp.onrender.com
 
 ## 💡 Objetivo
 
