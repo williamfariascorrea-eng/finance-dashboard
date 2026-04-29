@@ -1,4 +1,10 @@
-export default function SummaryCard({ index, title, value, change, tone }) {
+import type { SummaryCard as SummaryCardType } from '../types';
+
+interface SummaryCardProps extends SummaryCardType {
+  index: number;
+}
+
+export default function SummaryCard({ index, title, value, change, tone }: SummaryCardProps) {
   return (
     <article className="summary-card card surface">
       <div className="summary-card__top">

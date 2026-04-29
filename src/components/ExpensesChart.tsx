@@ -1,18 +1,24 @@
-function buildLinePath(points) {
+import type { MonthlyExpense } from '../types';
+
+interface ExpensesChartProps {
+  data: MonthlyExpense[];
+}
+
+function buildLinePath(points: Array<{ x: number; y: number }>) {
   return points.map((point, index) => `${index === 0 ? 'M' : 'L'} ${point.x} ${point.y}`).join(' ');
 }
 
-export default function ExpensesChart({ data }) {
+export default function ExpensesChart({ data }: ExpensesChartProps) {
   if (!Array.isArray(data) || data.length === 0) {
     return (
       <section className="chart surface">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">Analise mensal</span>
-            <h2>Despesas por mes</h2>
+            <span className="eyebrow">Análise mensal</span>
+            <h2>Despesas por mês</h2>
           </div>
         </div>
-        <p>Nao foi possivel carregar o grafico.</p>
+        <p>Não foi possível carregar o gráfico.</p>
       </section>
     );
   }
@@ -37,13 +43,18 @@ export default function ExpensesChart({ data }) {
     <section className="chart surface">
       <div className="section-heading">
         <div>
-          <span className="eyebrow">Analise de custos</span>
-          <h2>Evolucao de despesas por periodo</h2>
+          <span className="eyebrow">Análise de custos</span>
+          <h2>Evolução de despesas por período</h2>
         </div>
-        <span className="chart__legend">Ultimos 6 meses</span>
+        <span className="chart__legend">Últimos 6 meses</span>
       </div>
 
-      <svg viewBox={`0 0 ${width} ${height}`} className="chart__svg" role="img" aria-label="Grafico de linha e barras com despesas mensais">
+      <svg
+        viewBox={`0 0 ${width} ${height}`}
+        className="chart__svg"
+        role="img"
+        aria-label="Gráfico de linha e barras com despesas mensais"
+      >
         <defs>
           <linearGradient id="expenseArea" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.22" />
@@ -87,7 +98,13 @@ export default function ExpensesChart({ data }) {
         <path d={linePath} className="chart__line" />
 
         {points.map((point) => (
-          <circle key={`${point.month}-point`} cx={point.x} cy={point.y} r="5.5" className="chart__point" />
+          <circle
+            key={`${point.month}-point`}
+            cx={point.x}
+            cy={point.y}
+            r="5.5"
+            className="chart__point"
+          />
         ))}
       </svg>
     </section>

@@ -1,9 +1,12 @@
-const menuItems = [
-  { label: 'Dashboard', active: true },
-  { label: 'Fluxo' },
-  { label: 'Planejamento' },
-  { label: 'Narrativas' },
-  { label: 'Ajustes' },
+import { NavLink } from 'react-router-dom';
+import type { MenuItem } from '../types';
+
+const menuItems: MenuItem[] = [
+  { label: 'Dashboard', path: '/dashboard', active: true },
+  { label: 'Fluxo', path: '/fluxo' },
+  { label: 'Planejamento', path: '/planejamento' },
+  { label: 'Narrativas', path: '/narrativas' },
+  { label: 'Ajustes', path: '/ajustes' },
 ];
 
 function LogoIcon() {
@@ -35,16 +38,16 @@ export default function Sidebar() {
         </div>
       </div>
 
-      <nav className="sidebar__nav">
+      <nav className="sidebar__nav" aria-label="Navegação principal">
         {menuItems.map((item) => (
-          <button
+          <NavLink
             key={item.label}
-            type="button"
-            className={`sidebar__link ${item.active ? 'is-active' : ''}`}
+            to={item.path}
+            className={({ isActive }) => `sidebar__link ${isActive ? 'is-active' : ''}`}
           >
             <span className="sidebar__dot" />
             {item.label}
-          </button>
+          </NavLink>
         ))}
       </nav>
 
@@ -55,8 +58,8 @@ export default function Sidebar() {
       </div>
 
       <div className="sidebar__footer">
-        <p>Atualizado ha 4 minutos</p>
-        <button type="button" className="sidebar__ghost">
+        <p>Atualizado há 4 minutos</p>
+        <button type="button" className="sidebar__ghost" aria-label="Exportar snapshot">
           Exportar snapshot
         </button>
       </div>

@@ -792,3 +792,38 @@ input {
     width: 100%;
   }
 }
+
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-soft) 25%, var(--bg) 50%, var(--bg-soft) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-card,
+.skeleton-chart,
+.skeleton-transaction {
+  display: grid;
+  gap: 12px;
+  padding: 22px;
+  border-radius: 16px;
+  background: var(--card);
+}
+
+.skeleton-transaction {
+  grid-template-columns: 54px minmax(0, 1fr) auto;
+  gap: 14px;
+}
+
+.skeleton-transaction__content {
+  display: grid;
+  gap: 8px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}

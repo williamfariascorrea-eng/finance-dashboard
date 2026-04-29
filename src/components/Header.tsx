@@ -1,3 +1,6 @@
+import { useTheme } from '../context/ThemeContext';
+import { useFinanceStore } from '../context/store';
+
 function SearchIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -16,7 +19,7 @@ function BellIcon() {
   );
 }
 
-function SunMoonIcon({ theme }) {
+function SunMoonIcon({ theme }: { theme: string }) {
   return theme === 'paper' ? (
     <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M20 13.5A7.5 7.5 0 1110.5 4 6 6 0 0020 13.5z" />
@@ -29,15 +32,18 @@ function SunMoonIcon({ theme }) {
   );
 }
 
-export default function Header({ theme, onToggleTheme }) {
+export default function Header() {
+  const { theme, toggleTheme } = useTheme();
+  const { searchQuery, setSearchQuery } = useFinanceStore();
+
   return (
     <header className="header">
       <div className="header__intro">
         <span className="eyebrow">Executive finance</span>
         <h1>Painel financeiro com leitura corporativa e sinal claro de desempenho.</h1>
         <p>
-          Estrutura desenhada para operacao, previsibilidade e tomada de decisao, com visual mais
-          solido e menos cara de template.
+          Estrutura desenhada para operação, previsibilidade e tomada de decisão, com visual mais
+          sólido e menos cara de template.
         </p>
         <div className="header__meta">
           <div className="header__meta-card">
@@ -45,7 +51,7 @@ export default function Header({ theme, onToggleTheme }) {
             <strong>Abril 2026</strong>
           </div>
           <div className="header__meta-card">
-            <span>Responsavel</span>
+            <span>Responsável</span>
             <strong>Controladoria</strong>
           </div>
         </div>
@@ -54,18 +60,24 @@ export default function Header({ theme, onToggleTheme }) {
       <div className="header__actions">
         <label className="search surface">
           <SearchIcon />
-          <input type="text" placeholder="Buscar movimento ou categoria" />
+          <input
+            type="text"
+            placeholder="Buscar movimento ou categoria"
+            aria-label="Buscar"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
         </label>
 
-        <button type="button" className="icon-button surface" aria-label="Notificacoes">
+        <button type="button" className="icon-button surface" aria-label="Notificações">
           <BellIcon />
         </button>
 
         <button
           type="button"
           className="theme-toggle surface"
-          onClick={onToggleTheme}
-          aria-label="Alternar tema"
+          onClick={toggleTheme}
+          aria-label={theme === 'paper' ? 'Alternar para modo escuro' : 'Alternar para modo claro'}
         >
           <SunMoonIcon theme={theme} />
           <span>{theme === 'paper' ? 'Modo escuro' : 'Modo claro'}</span>
