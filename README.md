@@ -1,44 +1,76 @@
-# hellou, I'm WilliamCorrêa! 👋
+# Finance Dashboard - Atlas Capital
 
-### 🚀 Desenvolvedor Front-End em constante evolução
+Dashboard financeiro corporativo moderno e completo, desenvolvido com React, TypeScript e Vite.
 
-Sou um entusiasta da tecnologia e do design, focado em transformar ideias em interfaces funcionais e atraentes. Atualmente, estou mergulhado no ecossistema Front-End, explorando novas formas de criar experiências incríveis para o usuário. 
+![React](https://img.shields.io/badge/React-18.3-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.4-blue)
+![Vite](https://img.shields.io/badge/Vite-5.4-purple)
+![Status](https://img.shields.io/badge/Status-Online-green)
 
----
+## funcionalidades
 
-### 🛠️ No meu arsenal de tecnologias:
+- **Dashboard Principal**: Visão geral com métricas, gráficos e transações
+- **Fluxo de Caixa**: Tabela mensal detalhada com expansão de detalhes
+- **Planejamento**: Projeções financeiras e alertas automáticos
+- **Narrativas**: Análises automatizadas baseadas nos dados
+- **Ajustes**: Configurações, tema e exportação de dados
+- **Busca**: Filtragem em tempo real por nome ou categoria
+- **Filtros de Período**: 30 dias, 90 dias, ano atual
+- **Adicionar Transação**: Modal para novas entradas/saídas
+- **Modo Escuro**: Alternância de tema
+- **Persistência**: Dados salvos no localStorage
+- **Exportação**: JSON e CSV
 
-![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white)
-![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
-![JavaScript](https://img.shields.io/badge/javascript-%23F7DF1E.svg?style=for-the-badge&logo=javascript&logoColor=black)
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
-![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+## Tech Stack
 
----
+- **Framework**: React 18
+- **Linguagem**: TypeScript
+- **Build**: Vite
+- **Estado**: Zustand
+- **Roteamento**: React Router
+- **Estilos**: CSS Modules + CSS Variables
+- **Testes**: Vitest + Testing Library
 
-### 🌟 Projeto em Destaque: Finance Dashboard
+## Começando
 
-Este é um dos meus projetos favoritos, onde pude colocar em prática conceitos avançados de UI/UX e interatividade.
+```bash
+# Instalar dependências
+npm install
 
-* **O que faz:** Controle financeiro moderno e intuitivo.
-* **Destaques:** Gráficos interativos com **Chart.js**, modo escuro (Dark Mode) e design totalmente responsivo.
-* **Tech Stack:** HTML, CSS, JavaScript.
-* **Confira aqui:** [Finance Dashboard Live 🔗](https://finance-dashboard-jqhp.onrender.com)
+# Desenvolvimento
+npm run dev
 
----
+# Build
+npm run build
 
-### 🌱 O que estou buscando agora?
+# Testes
+npm test
 
-* **Conexões:** Adoro conhecer pessoas novas na área para trocar figurinhas, estudar juntos ou apenas jogar conversa fora sobre código!
-* **Colaboração:** Se você tem um projeto legal e precisa de uma mão no Front-End, vamos conversar!
-* **Aprendizado:** Estou sempre aberto a feedbacks e mentorias.
+# Lint
+npm run lint
+```
 
----
+## Estrutura
 
-### 📫 Vamos nos conectar?
-[![Instagram](https://img.shields.io/badge/Instagram-%23E4405F.svg?style=for-the-badge&logo=Instagram&logoColor=white)](https://www.instagram.com/williamsigma_/)
-[![Gmail](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](williamfariascorrea@gmail.com)
+```
+src/
+├── components/     # Componentes reutilizáveis
+├── context/       # Zustand stores
+├── data/          # Dados mock
+├── pages/         # Páginas routeadas
+├── styles/        # CSS global
+├── types/         # Tipos TypeScript
+└── __tests__/    # Testes
+```
 
----
+## Screenshots
 
-*"A persistência é o caminho do êxito."*
+O projeto inclui:
+- Design moderno com gradientes e efeitos de glassmorphism
+-Modo claro e escuro
+- GráficosSVG personalizados
+- Interface responsiva
+
+## Licença
+
+MIT © William Corrêa

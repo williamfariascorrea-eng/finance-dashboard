@@ -11,11 +11,13 @@ interface FinanceState {
   theme: 'paper' | 'night';
   loading: boolean;
   searchQuery: string;
+  dateFilter: { start: string; end: string } | null;
   setFilter: (filter: 'all' | 'entrada' | 'saida') => void;
   setTheme: (theme: 'paper' | 'night') => void;
   toggleTheme: () => void;
   setLoading: (loading: boolean) => void;
   setSearchQuery: (query: string) => void;
+  setDateFilter: (filter: { start: string; end: string } | null) => void;
   addTransaction: (transaction: Omit<Transaction, 'id'>) => void;
   removeTransaction: (id: number) => void;
   updateTransaction: (id: number, data: Partial<Transaction>) => void;
@@ -32,11 +34,13 @@ export const useFinanceStore = create<FinanceState>()(
       theme: 'paper',
       loading: false,
       searchQuery: '',
+      dateFilter: null,
       setFilter: (filter) => set({ filter }),
       setTheme: (theme) => set({ theme }),
       toggleTheme: () => set((state) => ({ theme: state.theme === 'paper' ? 'night' : 'paper' })),
       setLoading: (loading) => set({ loading }),
       setSearchQuery: (query) => set({ searchQuery: query }),
+      setDateFilter: (filter) => set({ dateFilter: filter }),
       addTransaction: (transaction) => {
         const { transactions } = get();
         const newTransaction = {

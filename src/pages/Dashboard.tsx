@@ -1,5 +1,6 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useFinanceStore } from '../context/store';
+import AddTransactionModal from '../components/AddTransactionModal';
 import ExpensesChart from '../components/ExpensesChart';
 import Header from '../components/Header';
 import PerformanceDonut from '../components/PerformanceDonut';
@@ -8,6 +9,7 @@ import Transactions from '../components/Transactions';
 
 export default function Dashboard() {
   const { filter, setFilter, searchQuery, transactions, summaryCards, monthlyExpenses } = useFinanceStore();
+  const [modalOpen, setModalOpen] = useState(false);
 
   const filteredTransactions = useMemo(() => {
     let result = transactions;
@@ -41,6 +43,12 @@ export default function Dashboard() {
   return (
     <main className="main-content">
       <Header />
+
+      <div className="dashboard-actions">
+        <button className="btn-add" onClick={() => setModalOpen(true)}>
+          + Nova Transação
+        </button>
+      </div>
 
       <section className="cards-grid">
         {summaryCards.map((card) => (
@@ -92,6 +100,8 @@ export default function Dashboard() {
       </section>
 
       <Transactions items={filteredTransactions} filter={filter} onFilterChange={setFilter} />
+
+      <AddTransactionModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
     </main>
   );
 }

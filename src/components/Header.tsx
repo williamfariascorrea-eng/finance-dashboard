@@ -1,6 +1,13 @@
 import { useTheme } from '../context/ThemeContext';
 import { useFinanceStore } from '../context/store';
 
+const PERIODOS = [
+  { label: 'Todos', value: null },
+  { label: '30 dias', value: '30d' },
+  { label: '90 dias', value: '90d' },
+  { label: 'Este ano', value: 'ano' },
+];
+
 function SearchIcon() {
   return (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -34,7 +41,27 @@ function SunMoonIcon({ theme }: { theme: string }) {
 
 export default function Header() {
   const { theme, toggleTheme } = useTheme();
-  const { searchQuery, setSearchQuery } = useFinanceStore();
+  const { searchQuery, setSearchQuery, dateFilter, setDateFilter } = useFinanceStore();
+
+  const getDateRange = (periodo: string | null) => {
+    if (!periodo) return { start: '', end: '' };
+    const agora = new Date();
+    const dataFim = agora.toISOString().split('T')[0];
+    const dataInicio = new Date();
+    if (periodo === '30d') dataInicio.setDate(dataInicio.getDate() - 30);
+    if (periodo === '90d') dataInicio.setDate(dataInicio.getDate() - 90);
+    if (periodo === 'ano') dataInicio.setMonth(0);
+    return { start: dataInicio.toISOString().split('T')[0], end: dataFim };
+  };
+
+  const handlePeriodChange = (periodo: string | null) => {
+    if (periodo === null) {
+      setDateFilter(null);
+    } else {
+      const range = getDateRange(periodo);
+      setDateFilter(range);
+    }
+  };
 
   return (
     <header className="header">
@@ -68,6 +95,19 @@ export default function Header() {
             onChange={(e) => setSearchQuery(e.target.value)}
           />
         </label>
+
+        <div className="period-filter" role="group" aria-label="Filtrar por período">
+          {PERIODOS.map((p) => (
+            <button
+              key={p.label}
+              type="button"
+              className={`period-btn ${dateFilter === null && p.value === null ? 'is-active' : ''}`}
+              onClick={() => handlePeriodChange(p.value)}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
 
         <button type="button" className="icon-button surface" aria-label="Notificações">
           <BellIcon />
