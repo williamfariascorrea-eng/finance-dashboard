@@ -66,7 +66,7 @@ export default function Header() {
   return (
     <header className="header">
       <div className="header__intro">
-        <span className="eyebrow">Executive finance</span>
+        <span className="eyebrow">EXECUTIVE FINANCE</span>
         <h1>Painel financeiro com leitura corporativa e sinal claro de desempenho.</h1>
         <p>
           Estrutura desenhada para operação, previsibilidade e tomada de decisão, com visual mais
@@ -74,12 +74,12 @@ export default function Header() {
         </p>
         <div className="header__meta">
           <div className="header__meta-card">
-            <span>Janela ativa</span>
+            <span>JANELA ATIVA</span>
             <strong>Abril 2026</strong>
           </div>
           <div className="header__meta-card">
-            <span>Responsável</span>
-            <strong>Controladoria</strong>
+            <span>RESPONSÁVEL</span>
+            <strong>CONTROLADORIA</strong>
           </div>
         </div>
       </div>

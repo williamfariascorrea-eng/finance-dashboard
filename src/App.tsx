@@ -7,6 +7,7 @@ import Fluxo from './pages/Fluxo';
 import Planejamento from './pages/Planejamento';
 import Narrativas from './pages/Narrativas';
 import Ajustes from './pages/Ajustes';
+import { ToastContainer } from './components/Toast';
 import './styles/global.css';
 import './styles/pages.css';
 
@@ -25,6 +26,7 @@ export default function App() {
               <Route path="/narrativas" element={<Narrativas />} />
               <Route path="/ajustes" element={<Ajustes />} />
             </Routes>
+            <ToastContainer />
           </div>
         </BrowserRouter>
       </ThemeProvider>

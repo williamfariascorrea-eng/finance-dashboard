@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useFinanceStore } from '../context/store';
+import { useAdvancedMetrics } from '../utils/advancedMetrics';
 import AddTransactionModal from '../components/AddTransactionModal';
 import ExpensesChart from '../components/ExpensesChart';
 import Header from '../components/Header';
@@ -10,6 +11,8 @@ import Transactions from '../components/Transactions';
 export default function Dashboard() {
   const { filter, setFilter, searchQuery, transactions, summaryCards, monthlyExpenses } = useFinanceStore();
   const [modalOpen, setModalOpen] = useState(false);
+
+  const metrics = useAdvancedMetrics(transactions);
 
   const filteredTransactions = useMemo(() => {
     let result = transactions;
@@ -46,13 +49,13 @@ export default function Dashboard() {
 
       <div className="dashboard-actions">
         <button className="btn-add" onClick={() => setModalOpen(true)}>
-          + Nova Transação
+          + NOVA TRANSAÇÃO
         </button>
       </div>
 
       <section className="cards-grid">
-        {summaryCards.map((card) => (
-          <SummaryCard key={card.title} {...card} />
+        {summaryCards.map((card, i) => (
+          <SummaryCard key={card.title} index={i + 1} {...card} />
         ))}
       </section>
 
@@ -61,8 +64,8 @@ export default function Dashboard() {
         <aside className="insight-panel surface">
           <div className="section-heading">
             <div>
-              <span className="eyebrow">Cockpit executivo</span>
-              <h2>Indicadores de controle</h2>
+              <span className="eyebrow">COCKPIT</span>
+              <h2>INDICADORES</h2>
             </div>
           </div>
 
@@ -70,28 +73,24 @@ export default function Dashboard() {
             <PerformanceDonut income={entryCount} outcome={exitCount} />
 
             <article className="insight-card insight-card--accent insight-card--metric">
-              <span>Runway operacional</span>
-              <strong>14 meses</strong>
-              <p>Reservas atuais sustentam o patamar de custo fixo com margem de segurança.</p>
+              <span>ECONOMIA</span>
+              <strong>{metrics.economiaTaxa.toFixed(1)}%</strong>
+              <p>Da receita retida como economia</p>
             </article>
 
             <article className="insight-card insight-card--metric">
-              <span>Movimentos monitorados</span>
-              <strong>{filteredTransactions.length}</strong>
-              <p>
-                {filter === 'all'
-                  ? 'Volume consolidado dos registros visíveis no painel.'
-                  : 'Volume de registros para o recorte selecionado.'}
-              </p>
+              <span>TICKET MÉDIO</span>
+              <strong>R$ {metrics.ticketMedioSaida.toFixed(0)}</strong>
+              <p>Média por transação</p>
             </article>
 
             <article className="insight-split">
               <div>
-                <span>Entradas</span>
+                <span>ENTRADAS</span>
                 <strong>{entryCount}</strong>
               </div>
               <div>
-                <span>Saídas</span>
+                <span>SAÍDAS</span>
                 <strong>{exitCount}</strong>
               </div>
             </article>
