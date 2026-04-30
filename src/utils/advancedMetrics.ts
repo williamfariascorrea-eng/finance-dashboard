@@ -96,7 +96,7 @@ export function useAdvancedMetrics(transactions: Transaction[]): MetricsResult {
       maiorDespesa,
       menorDespesa,
       categoriaMaisGasta,
-      tendência,
+      tendencia: 'estavel',
       projeçãoProximoMes,
       diasSobrevivência,
     };
