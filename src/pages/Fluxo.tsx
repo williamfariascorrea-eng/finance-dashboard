@@ -115,9 +115,11 @@ export default function Fluxo() {
 
           return (
             <div key={mes} className="fluxo-table__row-group">
-              <div 
+              <button 
+                type="button"
                 className={`fluxo-table__row ${isExpanded ? 'is-expanded' : ''}`}
                 onClick={() => toggleMonth(index)}
+                aria-expanded={isExpanded}
               >
                 <span className="fluxo-table__month">{mes}</span>
                 <span className="fluxo-table__entrada">{formatCurrency(totais.entrada)}</span>
@@ -132,7 +134,7 @@ export default function Fluxo() {
                     </svg>
                   )}
                 </span>
-              </div>
+              </button>
 
               {isExpanded && transacoes.length > 0 && (
                 <div className="fluxo-table__details">

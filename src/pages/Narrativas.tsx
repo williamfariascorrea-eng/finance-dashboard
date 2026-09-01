@@ -53,7 +53,7 @@ export default function Narrativas() {
       },
       {
         titulo: 'Gestão de Custos',
-        descricao: `Os custos fixos totalizam R$ ${summaryCards[2]?.value.replace('R$ ', '').replace('.', '') || '0'}, ${Number(summaryCards[2]?.change.replace(/[^0-9-]/g, '')) > 0 ? 'representando um aumento' : 'representando uma redução'} de ${Number(summaryCards[2]?.change.replace(/[^0-9-]/g, ''))?.replace('-', '') || '0'}% em relação ao período anterior. A otimização indica gestão disciplinada de recursos.`,
+        descricao: `Os custos fixos totalizam R$ ${summaryCards[2]?.value.replace('R$ ', '').replace('.', '') || '0'}, ${Number(summaryCards[2]?.change.replace(/[^0-9-]/g, '')) > 0 ? 'representando um aumento' : 'representando uma redução'} de ${Math.abs(Number(summaryCards[2]?.change.replace(/[^0-9-]/g, ''))) || '0'}% em relação ao período anterior. A otimização indica gestão disciplinada de recursos.`,
         data: new Date().toLocaleDateString('pt-BR'),
         tipo: 'neutro',
       },
@@ -118,7 +118,7 @@ export default function Narrativas() {
         <h2>💡 Dica</h2>
         <p>
           As narrativas são geradas automaticamente baseadas nos seus dados financeiros.
-          Você pode copiar任意 narrativa e colá-la em relatórios ou compartilhá-la com sua equipe.
+          Você pode copiar qualquer narrativa e colá-la em relatórios ou compartilhá-la com sua equipe.
         </p>
       </section>
     </div>

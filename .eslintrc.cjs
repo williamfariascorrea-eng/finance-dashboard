@@ -3,17 +3,18 @@ module.exports = {
   env: {
     browser: true,
     es2020: true,
-    'jest-environment-jsdom': true,
+    node: true,
   },
   extends: [
     'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'plugin:react/jsx-runtime',
     'plugin:react-hooks/recommended',
     'plugin:jsx-a11y/recommended',
-    'plugin:vitest/recommended',
     'prettier',
   ],
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
@@ -26,14 +27,14 @@ module.exports = {
       version: 'detect',
     },
   },
-  plugins: ['react-refresh', 'vitest'],
+  plugins: ['@typescript-eslint', 'react-refresh'],
   rules: {
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true, allowExportNames: ['default'] },
     ],
     'react/prop-types': 'off',
-    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
     'react-hooks/exhaustive-deps': 'warn',
   },
 };

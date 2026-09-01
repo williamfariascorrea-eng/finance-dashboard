@@ -1,8 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useFinanceStore } from '../context/store';
 import { validateTransaction, sanitizeAmount, formatCurrencyInput } from '../utils/validation';
-import {logTransactionAdded } from '../utils/auditLogger';
-import {toast} from './Toast';
 
 interface AddTransactionModalProps {
   isOpen: boolean;
@@ -77,8 +75,8 @@ export default function AddTransactionModal({ isOpen, onClose }: AddTransactionM
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={(e) => e.stopPropagation()}>
+    <div className="modal-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }} role="presentation">
+      <div className="modal" role="dialog" aria-modal="true" aria-label="Nova transação">
         <div className="modal__header">
           <h2>NOVA TRANSAÇÃO</h2>
           <button className="modal__close" onClick={onClose} aria-label="Fechar">
@@ -114,8 +112,8 @@ export default function AddTransactionModal({ isOpen, onClose }: AddTransactionM
           </div>
 
           <div className="form-group">
-            <label>TIPO</label>
-            <div className="form-group__tipo">
+            <span id="tipo-label" className="form-label">TIPO</span>
+            <div className="form-group__tipo" role="radiogroup" aria-labelledby="tipo-label">
               <button
                 type="button"
                 className={`tipo-btn ${tipo === 'entrada' ? 'tipo-btn--entrada' : ''}`}

@@ -76,7 +76,6 @@ export function useAdvancedMetrics(transactions: Transaction[]): MetricsResult {
       .sort((a, b) => b[1] - a[1])[0]?.[0] || null;
 
     const months = [...new Set(saidas.map(t => t.date.split(' ')[1]))];
-    const _tendencia = months.length >= 2 ? 'estavel' : 'estavel';
 
     const médiaMensal = totalDespesa / Math.max(months.length, 1);
     const projeçãoProximoMes = médiaMensal;

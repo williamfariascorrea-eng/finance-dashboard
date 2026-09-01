@@ -50,7 +50,7 @@ export default function Sidebar() {
         {menuItems.map((item) => (
           <NavLink
             key={item.label}
-            to={item.path}
+            to={item.path ?? '/'}
             className={({ isActive }) => `sidebar__link ${isActive ? 'is-active' : ''}`}
           >
             <span className="sidebar__dot" />

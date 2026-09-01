@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { Transaction, SummaryCard, MonthlyExpense } from '../types';
 import { transactions as mockTransactions, summaryCards as mockSummaryCards, monthlyExpenses as mockMonthlyExpenses } from '../data/mockData';
-import { sanitizeString, sanitizeAmount, sanitizeDate } from '../utils/validation';
+import { sanitizeString, sanitizeDate } from '../utils/validation';
 import { logTransactionAdded, logTransactionRemoved, logThemeChanged, logDataExported, logAppStarted } from '../utils/auditLogger';
 import { toast } from '../components/Toast';
 
@@ -61,7 +61,7 @@ export const useFinanceStore = create<FinanceState>()(
       addTransaction: (transaction) => {
         const { transactions } = get();
 
-        const sanitized = {
+        const sanitized: Omit<Transaction, 'id'> = {
           name: sanitizeString(transaction.name),
           category: sanitizeString(transaction.category),
           type: transaction.type === 'entrada' ? 'entrada' : 'saida',
@@ -96,15 +96,17 @@ export const useFinanceStore = create<FinanceState>()(
       updateTransaction: (id, data) => {
         const { transactions } = get();
 
-        const sanitized = {
+        const sanitized: Partial<Transaction> = {
           ...data,
           name: data.name ? sanitizeString(data.name) : undefined,
           category: data.category ? sanitizeString(data.category) : undefined,
         };
 
         set({
-          transactions: transactions.map(t =>
-            t.id === id ? { ...t, ...sanitized } : t
+          transactions: transactions.map((t) =>
+            t.id === id
+              ? { ...t, ...sanitized } as Transaction
+              : t
           ),
         });
       },

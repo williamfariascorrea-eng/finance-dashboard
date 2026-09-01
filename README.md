@@ -1,76 +1,90 @@
-# Finance Dashboard - Atlas Capital
+# Atlas Capital — Finance Dashboard
 
-Dashboard financeiro corporativo moderno e completo, desenvolvido com React, TypeScript e Vite.
+A modern corporate finance dashboard built with **React, TypeScript, and Vite**. Track cash flow, plan budgets, read automated financial narratives, and export your data — all in a polished, responsive interface with light and dark themes.
 
-![React](https://img.shields.io/badge/React-18.3-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.4-blue)
-![Vite](https://img.shields.io/badge/Vite-5.4-purple)
-![Status](https://img.shields.io/badge/Status-Online-green)
+![React](https://img.shields.io/badge/React-18.3-61dafb?style=flat&logo=react&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.4-3178c6?style=flat&logo=typescript&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5.4-646cff?style=flat&logo=vite&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-4.5-white?style=flat&logo=stateful)
+![Status](https://img.shields.io/badge/Status-Online-22c55e)
 
-## funcionalidades
+> ⚠️ *This is a front-end demo using mock data stored in `localStorage`. It is not connected to a real bank account or API.*
 
-- **Dashboard Principal**: Visão geral com métricas, gráficos e transações
-- **Fluxo de Caixa**: Tabela mensal detalhada com expansão de detalhes
-- **Planejamento**: Projeções financeiras e alertas automáticos
-- **Narrativas**: Análises automatizadas baseadas nos dados
-- **Ajustes**: Configurações, tema e exportação de dados
-- **Busca**: Filtragem em tempo real por nome ou categoria
-- **Filtros de Período**: 30 dias, 90 dias, ano atual
-- **Adicionar Transação**: Modal para novas entradas/saídas
-- **Modo Escuro**: Alternância de tema
-- **Persistência**: Dados salvos no localStorage
-- **Exportação**: JSON e CSV
+## ✨ Features
 
-## Tech Stack
+- **Dashboard overview** — key financial metrics, charts and recent transactions at a glance
+- **Cash flow** — month-by-month table with expandable detail rows
+- **Financial planning** — projections and automatic alerts
+- **Narratives** — auto-generated plain-language analysis of your numbers
+- **Settings** — theme, data management and export
+- **Real-time search** — filter transactions by name or category
+- **Date filters** — 30 days, 90 days or current year
+- **Add/remove transactions** — accessible modal form with validation
+- **Dark / light theme** — persisted across sessions
+- **Data persistence** — everything saved in `localStorage`
+- **Export** — download data as **JSON** or **CSV**
 
-- **Framework**: React 18
-- **Linguagem**: TypeScript
-- **Build**: Vite
-- **Estado**: Zustand
-- **Roteamento**: React Router
-- **Estilos**: CSS Modules + CSS Variables
-- **Testes**: Vitest + Testing Library
+## 🛠 Tech Stack
 
-## Começando
+| Concern     | Tool                          |
+|-------------|-------------------------------|
+| Framework   | React 18                      |
+| Language    | TypeScript 5.4                |
+| Build tool  | Vite                          |
+| State       | Zustand (with `persist` middleware) |
+| Routing     | React Router                  |
+| Styling     | CSS Modules + CSS variables   |
+| Testing     | Vitest + Testing Library      |
+| Linting     | ESLint (a11y + React hooks)   |
+| Export      | jsPDF, JSON, CSV              |
+
+## 🚀 Getting Started
 
 ```bash
-# Instalar dependências
+# 1. Install dependencies
 npm install
 
-# Desenvolvimento
+# 2. Start the development server
 npm run dev
 
-# Build
+# 3. Production build
 npm run build
 
-# Testes
+# 4. Run tests
 npm test
 
-# Lint
+# 5. Lint and typecheck
 npm run lint
+npm run typecheck
 ```
 
-## Estrutura
+## 📁 Project Structure
 
 ```
 src/
-├── components/     # Componentes reutilizáveis
-├── context/       # Zustand stores
-├── data/          # Dados mock
-├── pages/         # Páginas routeadas
-├── styles/        # CSS global
-├── types/         # Tipos TypeScript
-└── __tests__/    # Testes
+├── __tests__/   # Unit tests (Vitest)
+├── components/  # Reusable UI components
+├── context/     # Zustand stores + theme context
+├── data/        # Mock data
+├── pages/       # Routed pages (Dashboard, Fluxo, ...)
+├── styles/      # Global CSS
+├── types/       # Shared TypeScript types
+└── utils/       # Validation, metrics, logging, PDF export
 ```
 
-## Screenshots
+## ✅ Quality Gates
 
-O projeto inclui:
-- Design moderno com gradientes e efeitos de glassmorphism
--Modo claro e escuro
-- GráficosSVG personalizados
-- Interface responsiva
+This project runs clean through:
 
-## Licença
+- `npm run typecheck` — **0 errors**
+- `npm run lint` — **0 errors** (incl. accessibility rules)
+- `npm run test` — **6/6 passing** (store unit tests)
+- `npm run build` — production bundle
+
+## 🔗 Live Demo
+
+[finance-dashboard-jqhp.onrender.com](https://finance-dashboard-jqhp.onrender.com/)
+
+## 📄 License
 
 MIT © William Corrêa
