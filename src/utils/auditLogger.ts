@@ -77,8 +77,8 @@ class AuditLogger {
 
 export const auditLogger = new AuditLogger();
 
-export const logTransactionAdded = (transactionName: string, amount: string) => {
-  auditLogger.success('ADD_TRANSACTION', `Nova transação: ${transactionName} - ${amount}`);
+export const logTransactionAdded = (transactionName: string, amount: number) => {
+  auditLogger.success('ADD_TRANSACTION', `Nova transação: ${transactionName} - R$ ${amount.toLocaleString('pt-BR')}`);
 };
 
 export const logTransactionRemoved = (transactionId: number, transactionName: string) => {

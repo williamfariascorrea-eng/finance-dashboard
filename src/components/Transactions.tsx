@@ -1,4 +1,5 @@
 import type { Transaction } from '../types';
+import { formatDatePt, formatSigned } from '../utils/money';
 
 interface TransactionsProps {
   items: Transaction[];
@@ -47,8 +48,10 @@ export default function Transactions({ items, filter, onFilterChange }: Transact
               <span>{item.category}</span>
             </div>
             <span className={`transaction-row__type ${item.type}`}>{item.type}</span>
-            <strong className={`transaction-row__amount ${item.type}`}>{item.amount}</strong>
-            <time dateTime={item.date}>{item.date}</time>
+            <strong className={`transaction-row__amount ${item.type}`}>
+              {formatSigned(item.type, item.amount)}
+            </strong>
+            <time dateTime={item.date}>{formatDatePt(item.date)}</time>
           </article>
         ))}
       </div>

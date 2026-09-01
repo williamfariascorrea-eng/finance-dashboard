@@ -122,6 +122,15 @@
   background: var(--bg);
 }
 
+.fluxo-table__row:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.fluxo-table__row:disabled:hover {
+  background: transparent;
+}
+
 .fluxo-table__row:last-child {
   border-bottom: none;
 }
@@ -137,6 +146,14 @@
 
 .fluxo-table__saida {
   color: var(--danger);
+}
+
+.fluxo-table__entrada,
+.fluxo-table__saida,
+.fluxo-table__saldo,
+.fluxo-table__detail-row span:nth-child(3) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 .fluxo-table__saldo {

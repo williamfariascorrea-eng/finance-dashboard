@@ -83,10 +83,5 @@ export const calculateCategorySpending = (
 ): number => {
   return transactions
     .filter((t) => t.category === category && t.type === 'saida')
-    .reduce((acc, t) => {
-      const value = parseFloat(
-        t.amount.replace(/[R$\s.]/g, '').replace(',', '.')
-      );
-      return acc + (isNaN(value) ? 0 : value);
-    }, 0);
+    .reduce((acc, t) => acc + t.amount, 0);
 };

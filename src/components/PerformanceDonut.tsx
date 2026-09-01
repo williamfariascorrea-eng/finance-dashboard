@@ -1,3 +1,5 @@
+import { formatBRL } from '../utils/money';
+
 interface PerformanceDonutProps {
   income: number;
   outcome: number;
@@ -24,7 +26,7 @@ export default function PerformanceDonut({ income, outcome }: PerformanceDonutPr
         >
           <div className="performance-card__center">
             <strong>{Math.round(incomeRatio * 100)}%</strong>
-            <small>entrada</small>
+            <small>entradas</small>
           </div>
         </div>
 
@@ -32,12 +34,12 @@ export default function PerformanceDonut({ income, outcome }: PerformanceDonutPr
           <div>
             <span className="performance-card__swatch performance-card__swatch--income" />
             <p>Entradas</p>
-            <strong>{income}</strong>
+            <strong>{formatBRL(income)}</strong>
           </div>
           <div>
             <span className="performance-card__swatch performance-card__swatch--outcome" />
             <p>Saídas</p>
-            <strong>{outcome}</strong>
+            <strong>{formatBRL(outcome)}</strong>
           </div>
         </div>
       </div>

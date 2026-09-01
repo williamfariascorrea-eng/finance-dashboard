@@ -1,5 +1,7 @@
+import { useMemo } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useFinanceStore } from '../context/store';
+import { toISODate } from '../utils/money';
 
 const PERIODOS = [
   { label: 'Todos', value: null },
@@ -39,47 +41,64 @@ function SunMoonIcon({ theme }: { theme: string }) {
   );
 }
 
+function formatRangeLabel(range: { start: string; end: string } | null): string {
+  if (!range) return 'Todo o histórico';
+  const formatDate = (iso: string) => {
+    const [, m, d] = iso.split('-');
+    return `${d}/${m}`;
+  };
+  return `${formatDate(range.start)} – ${formatDate(range.end)}`;
+}
+
 export default function Header() {
   const { theme, toggleTheme } = useTheme();
   const { searchQuery, setSearchQuery, dateFilter, setDateFilter } = useFinanceStore();
 
-  const getDateRange = (periodo: string | null) => {
-    if (!periodo) return { start: '', end: '' };
-    const agora = new Date();
-    const dataFim = agora.toISOString().split('T')[0];
-    const dataInicio = new Date();
-    if (periodo === '30d') dataInicio.setDate(dataInicio.getDate() - 30);
-    if (periodo === '90d') dataInicio.setDate(dataInicio.getDate() - 90);
-    if (periodo === 'ano') dataInicio.setMonth(0);
-    return { start: dataInicio.toISOString().split('T')[0], end: dataFim };
-  };
+  const activePeriod = useMemo(() => {
+    if (dateFilter === null) return 'Todos';
+    const startYear = dateFilter.start.slice(0, 4);
+    const endYear = dateFilter.end.slice(0, 4);
+    if (startYear === endYear && dateFilter.start.endsWith('01-01')) return 'Este ano';
+    const start = new Date(dateFilter.start);
+    const end = new Date(dateFilter.end);
+    const days = Math.round((end.getTime() - start.getTime()) / 86400000);
+    return days <= 31 ? '30 dias' : '90 dias';
+  }, [dateFilter]);
 
   const handlePeriodChange = (periodo: string | null) => {
     if (periodo === null) {
       setDateFilter(null);
-    } else {
-      const range = getDateRange(periodo);
-      setDateFilter(range);
+      return;
     }
+
+    const agora = new Date();
+    const dataFim = toISODate(agora);
+    const start = new Date(agora);
+
+    if (periodo === '30d') start.setDate(start.getDate() - 30);
+    if (periodo === '90d') start.setDate(start.getDate() - 90);
+    if (periodo === 'ano') start.setMonth(0, 1);
+
+    setDateFilter({ start: toISODate(start), end: dataFim });
   };
 
   return (
     <header className="header">
       <div className="header__intro">
         <span className="eyebrow">EXECUTIVE FINANCE</span>
-        <h1>Painel financeiro com leitura corporativa e sinal claro de desempenho.</h1>
+        <h1>Controle financeiro com sinal claro de desempenho.</h1>
         <p>
-          Estrutura desenhada para operação, previsibilidade e tomada de decisão, com visual mais
-          sólido e menos cara de template.
+          Painel para operação, previsibilidade e tomada de decisão, com todos os indicadores
+          calculados em tempo real a partir dos seus lançamentos.
         </p>
         <div className="header__meta">
           <div className="header__meta-card">
             <span>JANELA ATIVA</span>
-            <strong>Abril 2026</strong>
+            <strong>{formatRangeLabel(dateFilter)}</strong>
           </div>
           <div className="header__meta-card">
             <span>RESPONSÁVEL</span>
-            <strong>CONTROLADORIA</strong>
+            <strong>WILLIAM CORRÊA</strong>
           </div>
         </div>
       </div>
@@ -101,8 +120,9 @@ export default function Header() {
             <button
               key={p.label}
               type="button"
-              className={`period-btn ${dateFilter === null && p.value === null ? 'is-active' : ''}`}
+              className={`period-btn ${activePeriod === p.label ? 'is-active' : ''}`}
               onClick={() => handlePeriodChange(p.value)}
+              aria-pressed={activePeriod === p.label}
             >
               {p.label}
             </button>

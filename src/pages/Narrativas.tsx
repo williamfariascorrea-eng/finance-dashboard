@@ -1,78 +1,56 @@
 import { useMemo } from 'react';
 import { useFinanceStore } from '../context/store';
+import { useAdvancedMetrics } from '../utils/advancedMetrics';
+import { formatBRL } from '../utils/money';
 
 export default function Narrativas() {
-  const { transactions, summaryCards } = useFinanceStore();
+  const { transactions } = useFinanceStore();
+  const metrics = useAdvancedMetrics(transactions);
 
   const narrativas = useMemo(() => {
-    const entradaTotal = transactions
-      .filter((t) => t.type === 'entrada')
-      .reduce((acc, t) => {
-        const valor = parseFloat(
-          t.amount.replace(/[R$\s+]/g, '').replace(/\./g, '').replace(',', '.')
-        );
-        return acc + valor;
-      }, 0);
+    const { totalReceita, totalDespesa, saldo, economiaTaxa, maiorDespesa, diasSobrevivência, tendencia } = metrics;
 
-    const saidaTotal = transactions
-      .filter((t) => t.type === 'saida')
-      .reduce((acc, t) => {
-        const valor = parseFloat(
-          t.amount.replace(/[R$\s+]/g, '').replace(/\./g, '').replace(',', '.')
-        );
-        return acc + valor;
-      }, 0);
+    const taxa = totalReceita > 0 ? (totalDespesa / totalReceita) * 100 : 0;
 
-    const saldo = entradaTotal - saidaTotal;
-    const taxa = (saidaTotal / entradaTotal) * 100;
+    const tendenciaTexto =
+      tendencia === 'alta'
+        ? 'em alta: o custo mensal médio vem crescendo e merece atenção'
+        : tendencia === 'baixa'
+        ? 'em queda: o custo mensal médio está diminuindo'
+        : 'estável: o custo mensal médio se mantém consistente';
 
     return [
       {
         titulo: 'Performance de Caixa',
-        descricao: `Neste período, registramos um volume total de entradas de R$ ${entradaTotal.toLocaleString(
-          'pt-BR'
-        )}, com saídas de R$ ${saidaTotal.toLocaleString(
-          'pt-BR'
-        )}. O saldo líquido de R$ ${saldo.toLocaleString('pt-BR')} representa uma ${taxa > 70 ? 'alta pressão no fluxo de caixa' : taxa > 50 ? 'situação confortável' : 'reserva robusta'} com ${taxa.toFixed(1)}% das entradas sendo absorvidos por custos.`,
-        data: new Date().toLocaleDateString('pt-BR'),
+        descricao: `Neste período, registramos um volume total de entradas de ${formatBRL(totalReceita)}, com saídas de ${formatBRL(totalDespesa)}. O saldo líquido de ${formatBRL(saldo)} representa ${taxa.toFixed(1)}% das entradas sendo absorvido por custos e uma economia de ${economiaTaxa.toFixed(1)}% sobre a receita gerada.`,
+        data: new Date().toISOString(),
         tipo: saldo >= 0 ? 'positivo' : 'negativo',
       },
       {
         titulo: 'Composição de Receitas',
-        descricao: `As receitas recorrentes representam R$ ${summaryCards[1]?.value.replace('R$ ', '').replace('.', '') || '0'} do total, correspondendo a ${(
-          (parseFloat(summaryCards[1]?.value.replace(/[R$\s.]/g, '') || '0') /
-            entradaTotal) *
-          100
-        ).toFixed(1)}% da receita total. Este indicador ${parseFloat(
-          summaryCards[1]?.value.replace(/[R$\s.]/g, '') || '0'
-        ) > entradaTotal * 0.5
-          ? 'mostra uma base sólida'
-          : 'sugere diversificação'} com ênfase em receitas variáveis.`,
-        data: new Date().toLocaleDateString('pt-BR'),
+        descricao: `As entradas somam ${formatBRL(totalReceita)} no período analisado, com recorrência distribuída entre salários e projetos. Manter fontes recorrentes reduz a dependência de receita variável e fortalece a previsibilidade operacional.`,
+        data: new Date().toISOString(),
         tipo: 'neutro',
       },
       {
         titulo: 'Gestão de Custos',
-        descricao: `Os custos fixos totalizam R$ ${summaryCards[2]?.value.replace('R$ ', '').replace('.', '') || '0'}, ${Number(summaryCards[2]?.change.replace(/[^0-9-]/g, '')) > 0 ? 'representando um aumento' : 'representando uma redução'} de ${Math.abs(Number(summaryCards[2]?.change.replace(/[^0-9-]/g, ''))) || '0'}% em relação ao período anterior. A otimização indica gestão disciplinada de recursos.`,
-        data: new Date().toLocaleDateString('pt-BR'),
-        tipo: 'neutro',
+        descricao: maiorDespesa
+          ? `A maior despesa do período foi "${maiorDespesa.name}" com ${formatBRL(maiorDespesa.value)}. A trajetória dos custos está ${tendenciaTexto}. Revisar as categorias de maior peso é a alavanca com maior retorno imediato.`
+          : 'Nenhuma despesa registrada no período analisado.',
+        data: new Date().toISOString(),
+        tipo: maiorDespesa && maiorDespesa.value > totalDespesa * 0.4 ? 'negativo' : 'neutro',
       },
       {
         titulo: 'Runway Operacional',
-        descricao: `Com reservas atuais de R$ ${summaryCards[0]?.value.replace('R$ ', '').replace('.', '') || '0'}, o caixa atual sustenta ${Math.floor(
-          parseFloat(summaryCards[0]?.value.replace(/[R$\s.]/g, '') || '0') / saidaTotal
-        )} meses de operações. Este período de folga oferece margem para decisões estratégicas e investimento em crescimento.`,
-        data: new Date().toLocaleDateString('pt-BR'),
-        tipo:
-          parseFloat(summaryCards[0]?.value.replace(/[R$\s.]/g, '') || '0') / saidaTotal > 6
-            ? 'positivo'
-            : 'neutro',
+        descricao: `Com caixa líquido de ${formatBRL(saldo)}, a operação se sustenta por aproximadamente ${diasSobrevivência} dias sem novas entradas. Este período de folga oferece margem para decisões estratégicas e investimento em crescimento.`,
+        data: new Date().toISOString(),
+        tipo: diasSobrevivência > 180 ? 'positivo' : 'neutro',
       },
     ];
-  }, [transactions, summaryCards]);
+  }, [metrics]);
 
-  const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr);
+  const formatDate = (iso: string) => {
+    const date = new Date(iso);
     return date.toLocaleDateString('pt-BR', {
       day: 'numeric',
       month: 'long',
@@ -106,7 +84,10 @@ export default function Narrativas() {
                   ? '↓ Atenção'
                   : '→ Informativo'}
               </span>
-              <button className="narrativa-copy" onClick={() => navigator.clipboard.writeText(narrativa.descricao)}>
+              <button
+                className="narrativa-copy"
+                onClick={() => navigator.clipboard.writeText(narrativa.descricao)}
+              >
                 📋 Copiar
               </button>
             </div>

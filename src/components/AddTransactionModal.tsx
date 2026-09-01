@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useFinanceStore } from '../context/store';
 import { validateTransaction, sanitizeAmount, formatCurrencyInput } from '../utils/validation';
+import { toISODate } from '../utils/money';
 
 interface AddTransactionModalProps {
   isOpen: boolean;
@@ -43,18 +44,13 @@ export default function AddTransactionModal({ isOpen, onClose }: AddTransactionM
     }
 
     const numericValue = sanitizeAmount(amount);
-    const formattedAmount = `${tipo === 'entrada' ? '+' : '-'}R$ ${numericValue.toLocaleString('pt-BR')}`;
-    
-    const mesAtual = new Date().toLocaleDateString('pt-BR', { month: 'short' });
-    const anoAtual = new Date().getFullYear();
-    const formattedDate = date || `${mesAtual} ${anoAtual}`;
 
     addTransaction({
       name: nome,
       category: categoria,
       type: tipo,
-      amount: formattedAmount,
-      date: formattedDate,
+      amount: numericValue,
+      date: date || toISODate(new Date()),
     });
 
     setNome('');
@@ -146,10 +142,9 @@ export default function AddTransactionModal({ isOpen, onClose }: AddTransactionM
             <label htmlFor="date">DATA</label>
             <input
               id="date"
-              type="text"
+              type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
-              placeholder="Ex: 15 Abr 2026"
             />
           </div>
 

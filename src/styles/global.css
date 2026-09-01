@@ -290,6 +290,10 @@ input {
   margin-top: 12px;
 }
 
+.header__meta-card strong {
+  white-space: nowrap;
+}
+
 .header__meta-card {
   padding: 12px 16px;
   background: var(--bg-elevated);
@@ -313,6 +317,8 @@ input {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
 .search {
@@ -322,11 +328,14 @@ input {
   padding: 12px 16px;
   background: var(--bg-elevated);
   border: 1px solid var(--panel-border);
-  min-width: 280px;
+  min-width: 240px;
+  flex: 1 1 240px;
+  max-width: 320px;
 }
 
 .search input {
   width: 100%;
+  min-width: 0;
   background: transparent;
   border: none;
   outline: none;
@@ -529,13 +538,23 @@ input {
 
 .transaction-row {
   display: grid;
-  grid-template-columns: 48px minmax(0, 1fr) auto auto auto;
+  grid-template-columns: 48px minmax(0, 1fr) auto auto 70px;
   align-items: center;
   gap: 14px;
   padding: 14px 16px;
   background: var(--bg);
   border: 1px solid var(--panel-border);
   transition: all 0.2s ease;
+}
+
+.transaction-row time {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.transaction-row__amount {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
 }
 
 .transaction-row:hover {
@@ -782,9 +801,12 @@ input {
   .sidebar {
     position: static;
     height: auto;
-  flex-direction: row;
+    flex-direction: row;
     flex-wrap: wrap;
     gap: 16px;
+  }
+  .header__actions {
+    justify-content: flex-start;
   }
 }
 
@@ -798,6 +820,10 @@ input {
   .header__actions {
     flex-wrap: wrap;
   }
+  .search {
+    flex-basis: 100%;
+    max-width: none;
+  }
   .transaction-row {
     grid-template-columns: 48px minmax(0, 1fr);
   }
@@ -805,6 +831,12 @@ input {
   .transaction-row__amount,
   .transaction-row time {
     grid-column: 2;
+  }
+  .transaction-row time {
+    text-align: left;
+  }
+  .transaction-row__amount {
+    text-align: left;
   }
   .insight-split {
     grid-template-columns: 1fr;

@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import type { Transaction } from '../types';
+import { inRange, monthKey, parseAmount } from './money';
 
 interface MetricsResult {
   totalReceita: number;
@@ -18,67 +19,66 @@ interface MetricsResult {
   diasSobrevivência: number;
 }
 
-export function useAdvancedMetrics(transactions: Transaction[]): MetricsResult {
+export function useAdvancedMetrics(transactions: Transaction[], range: { start: string; end: string } | null = null): MetricsResult {
   return useMemo(() => {
-    const entradas = transactions.filter(t => t.type === 'entrada');
-    const saidas = transactions.filter(t => t.type === 'saida');
+    const entradas = transactions.filter((t) => t.type === 'entrada' && inRange(t.date, range));
+    const saidas = transactions.filter((t) => t.type === 'saida' && inRange(t.date, range));
 
-    const totalReceita = entradas.reduce((acc, t) => {
-      const value = parseFloat(t.amount.replace(/[R$\s.+]/g, '').replace(',', '.'));
-      return acc + (isNaN(value) ? 0 : value);
-    }, 0);
-
-    const totalDespesa = saidas.reduce((acc, t) => {
-      const value = parseFloat(t.amount.replace(/[R$\s.-]/g, '').replace(',', '.'));
-      return acc + (isNaN(value) ? 0 : value);
-    }, 0);
+    const totalReceita = entradas.reduce((acc, t) => acc + parseAmount(t.amount), 0);
+    const totalDespesa = saidas.reduce((acc, t) => acc + parseAmount(t.amount), 0);
 
     const saldo = totalReceita - totalDespesa;
-    const economiaTaxa = totalReceita > 0 ? ((saldo / totalReceita) * 100) : 0;
+    const economiaTaxa = totalReceita > 0 ? (saldo / totalReceita) * 100 : 0;
 
     const ticketMedioEntrada = entradas.length > 0 ? totalReceita / entradas.length : 0;
     const ticketMedioSaida = saidas.length > 0 ? totalDespesa / saidas.length : 0;
 
-    const categoriasFixas = ['Aluguel', 'Internet', 'Luz', 'Água', 'Telefone', 'Assinaturas'];
+    const categoriasFixas = ['Aluguel', 'Internet', 'Luz', 'Água', 'Telefone', 'Assinaturas', 'Licenças', 'Energia', 'Seguro'];
     const despesaFixa = saidas
       .filter(t => categoriasFixas.some(cat => t.category.toLowerCase().includes(cat.toLowerCase())))
-      .reduce((acc, t) => {
-        const value = parseFloat(t.amount.replace(/[R$\s.-]/g, '').replace(',', '.'));
-        return acc + (isNaN(value) ? 0 : value);
-      }, 0);
+      .reduce((acc, t) => acc + parseAmount(t.amount), 0);
 
     const despesaFixaPercent = totalDespesa > 0 ? (despesaFixa / totalDespesa) * 100 : 0;
     const despesaVariavelPercent = 100 - despesaFixaPercent;
 
-    const sortedSaidas = [...saidas].sort((a, b) => {
-      const valA = parseFloat(a.amount.replace(/[R$\s.-]/g, '').replace(',', '.'));
-      const valB = parseFloat(b.amount.replace(/[R$\s.-]/g, '').replace(',', '.'));
-      return valB - valA;
-    });
+    const sortedSaidas = [...saidas].sort((a, b) => parseAmount(b.amount) - parseAmount(a.amount));
 
-    const maiorDespesa = sortedSaidas.length > 0 ? {
-      name: sortedSaidas[0].name,
-      value: parseFloat(sortedSaidas[0].amount.replace(/[R$\s.-]/g, '').replace(',', '.'))
-    } : null;
+    const maiorDespesa = sortedSaidas.length > 0
+      ? { name: sortedSaidas[0].name, value: parseAmount(sortedSaidas[0].amount) }
+      : null;
 
-    const menorDespesa = sortedSaidas.length > 0 ? {
-      name: sortedSaidas[sortedSaidas.length - 1].name,
-      value: parseFloat(sortedSaidas[sortedSaidas.length - 1].amount.replace(/[R$\s.-]/g, '').replace(',', '.'))
-    } : null;
+    const menorDespesa = sortedSaidas.length > 0
+      ? { name: sortedSaidas[sortedSaidas.length - 1].name, value: parseAmount(sortedSaidas[sortedSaidas.length - 1].amount) }
+      : null;
 
     const categorySpending: Record<string, number> = {};
     saidas.forEach(t => {
-      const value = parseFloat(t.amount.replace(/[R$\s.-]/g, '').replace(',', '.'));
-      categorySpending[t.category] = (categorySpending[t.category] || 0) + value;
+      categorySpending[t.category] = (categorySpending[t.category] || 0) + parseAmount(t.amount);
     });
 
     const categoriaMaisGasta = Object.entries(categorySpending)
       .sort((a, b) => b[1] - a[1])[0]?.[0] || null;
 
-    const months = [...new Set(saidas.map(t => t.date.split(' ')[1]))];
+    const byMonth = new Map<string, number>();
+    saidas.forEach(t => {
+      const key = monthKey(t.date);
+      byMonth.set(key, (byMonth.get(key) || 0) + parseAmount(t.amount));
+    });
+    const monthlyValues = [...byMonth.entries()].sort((a, b) => a[0].localeCompare(b[0])).map(([, v]) => v);
 
-    const médiaMensal = totalDespesa / Math.max(months.length, 1);
-    const projeçãoProximoMes = médiaMensal;
+    const tendencia = (() => {
+      if (monthlyValues.length < 3) return 'estavel';
+      const half = Math.floor(monthlyValues.length / 2);
+      const first = monthlyValues.slice(0, half).reduce((a, b) => a + b, 0) / half;
+      const second = monthlyValues.slice(half).reduce((a, b) => a + b, 0) / Math.max(monthlyValues.length - half, 1);
+      const delta = (second - first) / Math.max(first, 1);
+      if (delta > 0.1) return 'alta';
+      if (delta < -0.1) return 'baixa';
+      return 'estavel';
+    })();
+
+    const médiaMensal = totalDespesa / Math.max(monthlyValues.length, 1);
+    const projeçãoProximoMes = Math.round(médiaMensal);
 
     const custoDiárioMédia = totalDespesa / 30;
     const diasSobrevivência = custoDiárioMédia > 0 ? Math.round(saldo / custoDiárioMédia) : 0;
@@ -95,11 +95,11 @@ export function useAdvancedMetrics(transactions: Transaction[]): MetricsResult {
       maiorDespesa,
       menorDespesa,
       categoriaMaisGasta,
-      tendencia: 'estavel',
+      tendencia,
       projeçãoProximoMes,
       diasSobrevivência,
     };
-  }, [transactions]);
+  }, [transactions, range]);
 }
 
 export const formatNumber = (value: number, decimals = 2): string => {

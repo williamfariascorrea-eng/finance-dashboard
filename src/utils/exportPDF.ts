@@ -1,4 +1,5 @@
 import { auditLogger } from './auditLogger';
+import { formatBRL } from './money';
 
 export const generatePDFReport = async (data: {
   transactions: Array<{
@@ -6,7 +7,7 @@ export const generatePDFReport = async (data: {
     name: string;
     category: string;
     type: string;
-    amount: string;
+    amount: number;
     date: string;
   }>;
   summary: {
@@ -43,16 +44,16 @@ export const generatePDFReport = async (data: {
   <div class="summary">
     <div class="summary-box">
       <span>Total Entradas</span>
-      <strong class="positive">R$ ${data.summary.totalEntrada.toLocaleString('pt-BR')}</strong>
+      <strong class="positive">${formatBRL(data.summary.totalEntrada)}</strong>
     </div>
     <div class="summary-box">
       <span>Total Saídas</span>
-      <strong class="negative">R$ ${data.summary.totalSaida.toLocaleString('pt-BR')}</strong>
+      <strong class="negative">${formatBRL(data.summary.totalSaida)}</strong>
     </div>
     <div class="summary-box">
       <span>Saldo</span>
       <strong class="${data.summary.saldo >= 0 ? 'positive' : 'negative'}">
-        R$ ${data.summary.saldo.toLocaleString('pt-BR')}
+        ${formatBRL(data.summary.saldo)}
       </strong>
     </div>
   </div>
@@ -77,7 +78,7 @@ export const generatePDFReport = async (data: {
           <td>${t.name}</td>
           <td>${t.category}</td>
           <td class="${t.type === 'entrada' ? 'positive' : 'negative'}">${t.type}</td>
-          <td class="${t.type === 'entrada' ? 'positive' : 'negative'}">${t.amount}</td>
+          <td class="${t.type === 'entrada' ? 'positive' : 'negative'}">${formatBRL(t.amount)}</td>
         </tr>
       `
         )

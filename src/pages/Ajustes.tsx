@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useFinanceStore } from '../context/store';
+import { buildMonthlyExpenses, buildSummaryCards } from '../utils/metrics';
 
 export default function Ajustes() {
   const { theme, setTheme } = useFinanceStore();
@@ -12,13 +13,13 @@ export default function Ajustes() {
   };
 
   const exportarDados = () => {
-    const { transactions, summaryCards, monthlyExpenses } = useFinanceStore.getState();
-    
+    const { transactions } = useFinanceStore.getState();
+
     const dados = {
       exportadoEm: new Date().toISOString(),
       transacoes: transactions,
-      cartoes: summaryCards,
-      despesasMensais: monthlyExpenses,
+      cartoes: buildSummaryCards(transactions),
+      despesasMensais: buildMonthlyExpenses(transactions),
     };
     
     const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });

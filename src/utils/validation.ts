@@ -1,3 +1,5 @@
+import { toISODate } from './money';
+
 export const sanitizeString = (input: string): string => {
   if (!input || typeof input !== 'string') return '';
   return input
@@ -8,25 +10,48 @@ export const sanitizeString = (input: string): string => {
     .slice(0, 500);
 };
 
-export const sanitizeAmount = (input: string): number => {
-  if (!input) return 0;
-  const cleaned = input.replace(/[R$\s.]/g, '').replace(',', '.');
+export const sanitizeAmount = (input: string | number): number => {
+  if (typeof input === 'number') return Number.isFinite(input) ? Math.abs(input) : 0;
+  const cleaned = (input || '')
+    .replace(/[R$\s]/g, '')
+    .replace(/\./g, '')
+    .replace(',', '.');
   const parsed = parseFloat(cleaned);
-  return isNaN(parsed) ? 0 : Math.abs(parsed);
+  return Number.isFinite(parsed) ? Math.abs(parsed) : 0;
 };
 
+const ISO_DATE_REGEX = /^\d{4}-\d{2}-\d{2}$/;
+
 export const sanitizeDate = (input: string): string => {
-  const dateRegex = /^(\d{1,2}\s+\w+\s+\d{4})$/;
-  if (!dateRegex.test(input)) {
-    return new Date().toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' });
+  if (!input) return toISODate(new Date());
+
+  const isoMatch = input.match(ISO_DATE_REGEX);
+  if (isoMatch) return input;
+
+  const brMatch = input.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (brMatch) {
+    const [, d, m, y] = brMatch;
+    return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
   }
-  return input;
+
+  const longMatch = input.match(/^(\d{1,2})\s+([A-Za-zÃ-ü]{3})\.?\s+(\d{4})$/);
+  if (longMatch) {
+    const MONTHS = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+    const monthIndex = MONTHS.indexOf(longMatch[2].toLowerCase());
+    if (monthIndex !== -1) {
+      const d = String(Number(longMatch[1])).padStart(2, '0');
+      const m = String(monthIndex + 1).padStart(2, '0');
+      return `${longMatch[3]}-${m}-${d}`;
+    }
+  }
+
+  return toISODate(new Date());
 };
 
 export const formatCurrencyInput = (value: string): string => {
   const numeric = value.replace(/\D/g, '');
   if (!numeric) return '';
-  const formatted = (parseInt(numeric) / 100).toFixed(2);
+  const formatted = (parseInt(numeric, 10) / 100).toFixed(2);
   return formatted.replace('.', ',');
 };
 
@@ -61,7 +86,7 @@ export const validateBudget = (data: {
   spent: number;
 }): { valid: boolean; warnings: string[] } => {
   const warnings: string[] = [];
-  const percentage = (data.spent / data.limit) * 100;
+  const percentage = (data.spent / Math.max(data.limit, 1)) * 100;
 
   if (percentage >= 100) {
     warnings.push(`Orçamento excedido em ${Math.round(percentage - 100)}%`);

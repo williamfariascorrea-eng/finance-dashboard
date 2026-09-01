@@ -1,4 +1,5 @@
 import type { MonthlyExpense } from '../types';
+import { formatBRL } from '../utils/money';
 
 interface ExpensesChartProps {
   data: MonthlyExpense[];
@@ -18,7 +19,7 @@ export default function ExpensesChart({ data }: ExpensesChartProps) {
             <h2>Despesas por mês</h2>
           </div>
         </div>
-        <p>Não foi possível carregar o gráfico.</p>
+        <p>Sem despesas no período selecionado.</p>
       </section>
     );
   }
@@ -26,7 +27,7 @@ export default function ExpensesChart({ data }: ExpensesChartProps) {
   const width = 760;
   const height = 360;
   const paddingX = 32;
-  const top = 28;
+  const top = 30;
   const bottom = 52;
   const maxValue = Math.max(...data.map((item) => item.value));
   const points = data.map((item, index) => {
@@ -46,7 +47,7 @@ export default function ExpensesChart({ data }: ExpensesChartProps) {
           <span className="eyebrow">Análise de custos</span>
           <h2>Evolução de despesas por período</h2>
         </div>
-        <span className="chart__legend">Últimos 6 meses</span>
+        <span className="chart__legend">{data.length === 1 ? '1 mês' : `${data.length} meses`}</span>
       </div>
 
       <svg
@@ -86,7 +87,7 @@ export default function ExpensesChart({ data }: ExpensesChartProps) {
                 className="chart__bar"
               />
               <text x={point.x} y={point.y - 10} textAnchor="middle" className="chart__value-label">
-                R$ {point.value}
+                {formatBRL(point.value)}
               </text>
               <text x={point.x} y={height - 18} textAnchor="middle" className="chart__label">
                 {point.month}

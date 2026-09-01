@@ -1,15 +1,14 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { Transaction, SummaryCard, MonthlyExpense } from '../types';
-import { transactions as mockTransactions, summaryCards as mockSummaryCards, monthlyExpenses as mockMonthlyExpenses } from '../data/mockData';
+import type { Transaction } from '../types';
+import { transactions as mockTransactions } from '../data/mockData';
 import { sanitizeString, sanitizeDate } from '../utils/validation';
+import { parseAmount } from '../utils/money';
 import { logTransactionAdded, logTransactionRemoved, logThemeChanged, logDataExported, logAppStarted } from '../utils/auditLogger';
 import { toast } from '../components/Toast';
 
 interface FinanceState {
   transactions: Transaction[];
-  summaryCards: SummaryCard[];
-  monthlyExpenses: MonthlyExpense[];
   filter: 'all' | 'entrada' | 'saida';
   theme: 'paper' | 'night';
   loading: boolean;
@@ -31,8 +30,6 @@ export const useFinanceStore = create<FinanceState>()(
   persist(
     (set, get) => ({
       transactions: mockTransactions,
-      summaryCards: mockSummaryCards,
-      monthlyExpenses: mockMonthlyExpenses,
       filter: 'all',
       theme: 'night',
       loading: false,
@@ -60,12 +57,13 @@ export const useFinanceStore = create<FinanceState>()(
 
       addTransaction: (transaction) => {
         const { transactions } = get();
+        const amount = parseAmount(transaction.amount);
 
         const sanitized: Omit<Transaction, 'id'> = {
           name: sanitizeString(transaction.name),
           category: sanitizeString(transaction.category),
           type: transaction.type === 'entrada' ? 'entrada' : 'saida',
-          amount: transaction.amount,
+          amount,
           date: sanitizeDate(transaction.date),
         };
 
@@ -74,11 +72,16 @@ export const useFinanceStore = create<FinanceState>()(
           return;
         }
 
+        if (amount <= 0) {
+          toast.error('Erro', 'Valor deve ser maior que zero');
+          return;
+        }
+
         const newId = Math.max(...transactions.map(t => t.id), 0) + 1;
         const newTransaction = { ...sanitized, id: newId };
 
         set({ transactions: [...transactions, newTransaction] });
-        logTransactionAdded(sanitized.name, sanitized.amount);
+        logTransactionAdded(sanitized.name, amount);
         toast.success('Sucesso', 'Transação adicionada');
       },
 
@@ -100,6 +103,8 @@ export const useFinanceStore = create<FinanceState>()(
           ...data,
           name: data.name ? sanitizeString(data.name) : undefined,
           category: data.category ? sanitizeString(data.category) : undefined,
+          amount: data.amount !== undefined ? parseAmount(data.amount) : undefined,
+          date: data.date ? sanitizeDate(data.date) : undefined,
         };
 
         set({
@@ -114,8 +119,9 @@ export const useFinanceStore = create<FinanceState>()(
       resetData: () => {
         set({
           transactions: mockTransactions,
-          summaryCards: mockSummaryCards,
-          monthlyExpenses: mockMonthlyExpenses,
+          filter: 'all',
+          searchQuery: '',
+          dateFilter: null,
         });
         logDataExported('RESET');
         toast.success('Resetado', 'Dados restaurados');
@@ -125,8 +131,6 @@ export const useFinanceStore = create<FinanceState>()(
       name: 'atlas-finance-storage',
       partialize: (state) => ({
         transactions: state.transactions,
-        summaryCards: state.summaryCards,
-        monthlyExpenses: state.monthlyExpenses,
         theme: state.theme,
       }),
     }

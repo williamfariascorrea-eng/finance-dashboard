@@ -15,7 +15,7 @@ export interface Transaction {
   name: string;
   category: string;
   type: 'entrada' | 'saida';
-  amount: string;
+  amount: number;
   date: string;
 }
 
