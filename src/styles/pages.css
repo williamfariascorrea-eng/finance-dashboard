@@ -36,6 +36,7 @@
   color: var(--text);
   font-size: 0.9rem;
   cursor: pointer;
+  border-radius: var(--radius-sm);
 }
 
 .year-select:focus {
@@ -53,7 +54,8 @@
 
 .fluxo-card {
   padding: 20px;
-  background: var(--bg-elevated);
+  background: linear-gradient(180deg, var(--bg-elevated), var(--panel));
+  border-radius: var(--radius-sm);
 }
 
 .fluxo-card span {
@@ -89,8 +91,10 @@
 }
 
 .fluxo-table {
-  background: var(--bg-elevated);
+  background: linear-gradient(180deg, var(--bg-elevated), var(--panel));
   border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .fluxo-table__header {
@@ -226,8 +230,10 @@
 }
 
 .settings-card {
-  background: var(--bg-elevated);
+  background: linear-gradient(180deg, var(--bg-elevated), var(--panel));
   border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .settings-row {
@@ -257,10 +263,12 @@
   font-weight: 500;
   font-size: 0.85rem;
   cursor: pointer;
+  border-radius: var(--radius-sm);
 }
 
 .settings-button:hover {
   opacity: 0.9;
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .settings-button--danger {
@@ -268,11 +276,16 @@
   color: white;
 }
 
+.settings-button--danger:hover {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
 .settings-toggle {
   padding: 10px 16px;
   background: var(--bg);
   border: 1px solid var(--panel-border);
   cursor: pointer;
+  border-radius: var(--radius-sm);
 }
 
 .settings-toggle.active {
@@ -358,7 +371,8 @@
 
 .plan-card {
   padding: 20px;
-  background: var(--bg-elevated);
+  background: linear-gradient(180deg, var(--bg-elevated), var(--panel));
+  border-radius: var(--radius-sm);
 }
 
 .plan-card span {
@@ -399,8 +413,10 @@
 }
 
 .plan-table {
-  background: var(--bg-elevated);
+  background: linear-gradient(180deg, var(--bg-elevated), var(--panel));
   border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  overflow: hidden;
 }
 
 .plan-table__header {
@@ -441,10 +457,11 @@
 
 .plan-bars {
   display: grid;
-  gap: 10px;
-  background: var(--bg-elevated);
+  gap: 12px;
+  background: linear-gradient(180deg, var(--bg-elevated), var(--panel));
   border: 1px solid var(--panel-border);
   padding: 18px;
+  border-radius: var(--radius);
 }
 
 .plan-bar {
@@ -486,9 +503,10 @@
   display: flex;
   gap: 12px;
   padding: 16px;
-  background: var(--bg-elevated);
+  background: linear-gradient(180deg, var(--bg-elevated), var(--panel));
   border: 1px solid var(--panel-border);
   border-left: 3px solid var(--warning);
+  border-radius: var(--radius-sm);
 }
 
 .plan-alert--warning {
@@ -522,9 +540,10 @@
 
 .narrativa-card {
   padding: 20px;
-  background: var(--bg-elevated);
+  background: linear-gradient(180deg, var(--bg-elevated), var(--panel));
   border: 1px solid var(--panel-border);
   border-left: 3px solid var(--text-dim);
+  border-radius: var(--radius);
 }
 
 .narrativa-card--positivo {
@@ -627,19 +646,21 @@
 }
 
 .btn-add {
-  padding: 10px 18px;
-  background: var(--accent);
+  padding: 12px 18px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft-strong));
   color: white;
   border: none;
   font-weight: 600;
   font-size: 0.85rem;
   cursor: pointer;
   box-shadow: var(--glow);
+  border-radius: var(--radius);
 }
 
 .btn-add:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
+  opacity: 0.92;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 40px var(--accent-glow);
 }
 
 .modal-overlay {
@@ -653,10 +674,11 @@
 
 .modal {
   background: var(--panel-strong);
-  width: 100%;
   max-width: 420px;
   margin: 16px;
   border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
 }
 
 .modal__header {
@@ -717,12 +739,14 @@
   background: var(--bg);
   color: var(--text);
   font-size: 0.9rem;
+  border-radius: var(--radius-sm);
 }
 
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
   border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
 .form-group__tipo {
@@ -770,15 +794,17 @@
   color: var(--text);
   font-weight: 500;
   cursor: pointer;
+  border-radius: var(--radius-sm);
 }
 
 .btn-primary {
   padding: 12px;
   border: none;
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent), var(--accent-soft-strong));
   color: white;
   font-weight: 500;
   cursor: pointer;
+  border-radius: var(--radius-sm);
 }
 
 .period-filter {
